@@ -1,0 +1,20 @@
+version: '3'
+
+networks:
+  default:
+    external:
+      name: datarade_dev
+
+services:
+  dev:
+    container_name: crystal_trie
+    build:
+      context: .
+      dockerfile: docker/build/Dockerfile
+    command: ./docker/script/start.sh
+    ports:
+      - 9001:3000
+    volumes:
+      - .:/app
+    stdin_open: true
+    tty: true

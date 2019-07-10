@@ -1,0 +1,21 @@
+name: crystal_trie
+version: 0.1.0
+
+# authors:
+#   - name <email@example.com>
+
+# description: |
+#   Short description of logo_api
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal
+  sentry:
+    github: samueleaton/sentry
+    branch: master
+
+# development_dependencies:
+#   webmock:
+#     github: manastech/webmock.cr
+
+# license: MIT
