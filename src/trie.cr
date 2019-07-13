@@ -1,4 +1,6 @@
-class Trie
+require "./completion_strategy"
+
+class Trie < CompletionStrategy
   property ending
   getter tries
 
@@ -14,20 +16,6 @@ class Trie
 
     @tries[character].ending = true if chopped.blank?
     @tries[character].push(chopped)
-  end
-
-  def count
-    @tries.sum do |_, trie|
-      (trie.ending ? 1 : 0) + trie.count
-    end || 0
-  end
-
-  def print_words(prefix : String)
-    @tries.each do |char, trie|
-      word = prefix + char
-      trie.print_words(word)
-      puts word if trie.ending
-    end
   end
 
   def complete(word : String)
@@ -62,5 +50,19 @@ class Trie
 
     word = word.lchop
     tries[character].seek(word)
+  end
+
+  protected def count
+    @tries.sum do |_, trie|
+      (trie.ending ? 1 : 0) + trie.count
+    end || 0
+  end
+
+  protected def print_words(prefix : String)
+    @tries.each do |char, trie|
+      word = prefix + char
+      trie.print_words(word)
+      puts word if trie.ending
+    end
   end
 end

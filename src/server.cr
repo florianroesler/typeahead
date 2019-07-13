@@ -1,18 +1,17 @@
 require "kemal"
 require "http/client"
 require "logger"
+require "./typeahead.cr"
 
 Log = Logger.new(STDOUT)
 Log.level = Logger::DEBUG
 
-require "./trie.cr"
+typeahead = Typeahead.new
 
-lines = File.read_lines("#{Dir.current}/data/words_alpha.txt")
-trie = Trie.new
-
-lines.each do |word|
-	trie.push(word.strip)
-end
+lines = File.read_lines("#{Dir.current}/data/small.txt")
+puts "Building Index"
+lines.each { |sentence| typeahead.push(sentence) }
+puts "Index Built"
 
 before_all do |env|
 	env.response.content_type = "application/json"
@@ -23,7 +22,8 @@ get "/" do
 end
 
 get "/complete" do |env|
-	trie.complete(env.params.query.fetch("q", "")).to_json
+	query = env.params.query.fetch("q", "").strip
+	typeahead.complete(query).to_json
 end
 
 Kemal.run

@@ -1,16 +1,15 @@
 require "cadmium"
 require "string_pool"
+require "./completion_strategy"
 
-class NgramLookup
+class NgramLookup < CompletionStrategy
   def initialize
     @lookup = Hash(String, Set(String)).new { |hash, key| hash[key] = Set(String).new }
   end
 
   def push(sentence : String)
     process_sentence(sentence).each do |ngrams|
-      ngrams.each do |ngram|
-        @lookup[ngram].add(sentence)
-      end
+      ngrams.each { |ngram| @lookup[ngram].add(sentence) }
     end
   end
 
