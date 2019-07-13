@@ -8,11 +8,11 @@ class Trie
   end
 
   def push(word : String)
-    return if word.size.zero?
+    return if word.blank?
     character = word.char_at(0)
     chopped = word.lchop
 
-    @tries[character].ending = true if chopped.size.zero?
+    @tries[character].ending = true if chopped.blank?
     @tries[character].push(chopped)
   end
 
@@ -31,8 +31,13 @@ class Trie
   end
 
   def complete(word : String)
+    word = word.strip.downcase
     start_node = seek(word)
-    start_node.collect_words(word) unless start_node.nil?
+    if start_node.nil?
+      Array(String).new
+    else
+      start_node.collect_words(word)
+    end
   end
 
   protected def collect_words(prefix : String, count = 10)
@@ -50,7 +55,7 @@ class Trie
   end
 
   protected def seek(word : String)
-    return self if word.size.zero?
+    return self if word.blank?
 
     character = word.char_at(0)
     return unless tries.has_key?(character)

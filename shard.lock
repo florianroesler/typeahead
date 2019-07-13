@@ -1,5 +1,9 @@
 version: 1.0
 shards:
+  cadmium:
+    github: watzon/cadmium
+    commit: f39394a35fdf7df161067c57a2424c238d72b092
+
   exception_page:
     github: crystal-loot/exception_page
     version: 0.1.2

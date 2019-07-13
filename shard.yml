@@ -13,7 +13,9 @@ dependencies:
   sentry:
     github: samueleaton/sentry
     branch: master
-
+  cadmium:
+      github: watzon/cadmium
+      branch: master
 # development_dependencies:
 #   webmock:
 #     github: manastech/webmock.cr
