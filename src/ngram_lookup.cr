@@ -3,6 +3,9 @@ require "string_pool"
 require "./completion_strategy"
 
 class NgramLookup < CompletionStrategy
+  NGRAM_MIN_DEFAULT = 2
+  NGRAM_MAX_DEFAULT = 10
+
   def initialize
     @lookup = Hash(String, Set(String)).new { |hash, key| hash[key] = Set(String).new }
   end
@@ -15,10 +18,28 @@ class NgramLookup < CompletionStrategy
 
   def complete(query : String, count = 10)
     query = query.downcase
-    @lookup.fetch(query, Set(String).new).to_a[0..count - 1]
+    results = Set(String).new
+    quick_peak = @lookup.fetch(query, Set(String).new)
+    results = results.concat(quick_peak)
+
+    if results.size >= count
+      return results.to_a[0..count - 1]
+    end
+
+    ngrams = process_sentence(query)
+    sorted_ngrams = ngrams.sort_by { |n| n.size }.reverse
+
+    sorted_ngrams.each do |ngram|
+      results = results.concat(@lookup.fetch(ngram, Set(String).new))
+      if results.size >= count
+        return results.to_a[0..count - 1]
+      end
+    end
+
+    results.to_a[0..count - 1]
   end
 
-  private def generate_ngrams(word : String, min = 2, max = 10)
+  private def generate_ngrams(word : String, min = NGRAM_MIN_DEFAULT, max = NGRAM_MAX_DEFAULT)
     collection = Array(String).new
 
     (0..word.size).each do |index|

@@ -16,7 +16,6 @@ class Typeahead < CompletionStrategy
 
     @strategies.each do |strategy|
       next if result.size >= count
-      puts strategy.complete(query).inspect
       result += strategy.complete(query)
     end
 

@@ -8,7 +8,7 @@ Log.level = Logger::DEBUG
 
 typeahead = Typeahead.new
 
-lines = File.read_lines("#{Dir.current}/data/small.txt")
+lines = File.read_lines("#{Dir.current}/data/words_alpha.txt")
 puts "Building Index"
 lines.each { |sentence| typeahead.push(sentence) }
 puts "Index Built"
