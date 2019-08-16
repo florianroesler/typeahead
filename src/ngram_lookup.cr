@@ -4,7 +4,7 @@ require "./completion_strategy"
 
 class NgramLookup < CompletionStrategy
   NGRAM_MIN_DEFAULT = 2
-  NGRAM_MAX_DEFAULT = 10
+  NGRAM_MAX_DEFAULT = 5
 
   def initialize
     @lookup = Hash(String, Set(String)).new { |hash, key| hash[key] = Set(String).new }
